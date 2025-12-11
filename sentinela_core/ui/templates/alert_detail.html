@@ -2,30 +2,87 @@
 
 {% block content %}
 
-<h2 class="text-2xl font-semibold mb-4">Detalle de la Alerta #{{ alert.alert_id or alert.id }}</h2>
+<section class="space-y-4">
+    <div class="flex items-center justify-between gap-3">
+        <div>
+            <h1 class="text-xl font-semibold tracking-tight">
+                Alerta #{{ alert.alert_id or alert.id }}
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Análisis detallado generado por el motor EDR + IA local (Ollama).
+            </p>
+        </div>
 
-<div class="bg-gray-800 p-4 rounded mb-6">
-    <p><strong>Mensaje:</strong> {{ alert.alert_message or alert.message }}</p>
-</div>
+        <a href="/dashboard/alerts"
+           class="text-[11px] text-slate-400 hover:text-slate-100 transition">
+            ← Volver a listado
+        </a>
+    </div>
 
-<h3 class="text-xl mb-2">Explicación</h3>
-<div class="bg-gray-700 p-4 rounded whitespace-pre-line">
-    {{ alert.explanation }}
-</div>
+    <!-- Card principal -->
+    <div class="grid md:grid-cols-[1.1fr,1.4fr] gap-4">
+        <!-- Panel de metadatos -->
+        <div class="space-y-3">
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-4">
+                <h2 class="text-sm font-semibold mb-2 text-slate-100">Resumen de alerta</h2>
+                <dl class="space-y-2 text-xs text-slate-300">
+                    <div>
+                        <dt class="text-slate-400">ID</dt>
+                        <dd class="font-mono text-[11px]">{{ alert.alert_id or alert.id }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-slate-400">Tipo</dt>
+                        <dd class="font-mono text-[11px]">{{ alert.type or "process" }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-slate-400">Severidad</dt>
+                        <dd class="mt-0.5">
+                            <span class="inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-300">
+                                {{ alert.severity or "MEDIUM" }}
+                            </span>
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-slate-400">Mensaje bruto</dt>
+                        <dd class="mt-1 text-[11px] leading-snug whitespace-pre-line">
+                            {{ alert.alert_message or alert.message }}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
 
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-4">
+                <h2 class="text-sm font-semibold mb-2 text-slate-100">
+                    Acciones rápidas
+                </h2>
+                <p class="text-[11px] text-slate-400 mb-3">
+                    Puedes volver a ejecutar el análisis con el modelo IA para refrescar el contexto,
+                    por ejemplo si la alerta cambió o actualizaste reglas.
+                </p>
+                <a href="/dashboard/alert/{{ alert.alert_id or alert.id }}/analyze"
+                   class="inline-flex items-center justify-center px-3 py-1.5 text-[11px] font-medium rounded-full bg-emerald-500/90 hover:bg-emerald-400 text-slate-950 transition-colors">
+                    Analizar nuevamente con IA 🔍
+                </a>
+            </div>
+        </div>
 
-<h3 class="text-xl mt-6 mb-2">Acciones Recomendadas</h3>
-<div class="bg-gray-700 p-4 rounded whitespace-pre-line">
-    {{ alert.recommended_actions }}
-</div>
+        <!-- Panel de análisis IA -->
+        <div class="space-y-4">
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-4">
+                <h2 class="text-sm font-semibold mb-2 text-slate-100">Explicación</h2>
+                <div class="text-[12px] leading-relaxed text-slate-200 whitespace-pre-line">
+                    {{ alert.explanation or "Aún no se ha ejecutado análisis IA para esta alerta." }}
+                </div>
+            </div>
 
-
-<!-- Botón para generar análisis -->
-<div class="mt-6">
-    <a href="/dashboard/alert/{{ alert.alert_id or alert.id }}/analyze"
-       class="px-4 py-2 bg-green-600 rounded hover:bg-green-500">
-        Analizar con IA 🔍
-    </a>
-</div>
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-4">
+                <h2 class="text-sm font-semibold mb-2 text-slate-100">Acciones recomendadas</h2>
+                <div class="text-[12px] leading-relaxed text-slate-200 whitespace-pre-line">
+                    {{ alert.recommended_actions or "- Sin acciones registradas aún." }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

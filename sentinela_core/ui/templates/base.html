@@ -1,24 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Sentinela-Core EDR</title>
 
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
+    <style>
+        /* Scrollbar un poco más elegante en dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020617;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-200">
 
-    <nav class="bg-gray-800 px-6 py-3 shadow">
-        <h1 class="text-xl font-bold">🛡️ Sentinela-Core Dashboard</h1>
-    </nav>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+    <!-- Top bar tipo app de IA -->
+    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="h-7 w-7 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-xs font-bold">
+                    S
+                </div>
+                <div>
+                    <div class="text-sm font-semibold tracking-tight">
+                        Sentinela-Core
+                    </div>
+                    <div class="text-[11px] text-slate-400">
+                        Endpoint Defense &amp; Analysis (Lab Only)
+                    </div>
+                </div>
+            </div>
 
-    <main class="p-6">
-        {% block content %}
-        {% endblock %}
+            <nav class="flex items-center gap-3 text-xs text-slate-400">
+                <a href="/dashboard/alerts" class="hover:text-emerald-400 transition">Alertas</a>
+                <!-- Más secciones a futuro -->
+                <!-- <a href="#" class="hover:text-emerald-400 transition">Procesos</a> -->
+                <!-- <a href="#" class="hover:text-emerald-400 transition">Sandbox</a> -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="max-w-6xl mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
     </main>
 
+    <!-- Footer pequeñito -->
+    <footer class="mt-4 border-t border-slate-900/80">
+        <div class="max-w-6xl mx-auto px-4 py-3 text-[11px] text-slate-500 flex items-center justify-between">
+            <span>🛡️ Sentinela-Core · EDR de laboratorio</span>
+            <span>Solo uso ético / entornos controlados</span>
+        </div>
+    </footer>
 </body>
 </html>

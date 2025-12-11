@@ -1,36 +1,96 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="text-2xl font-semibold mb-4">Últimas Alertas</h2>
 
-<table class="w-full bg-gray-800 rounded shadow divide-y divide-gray-700">
-    <thead class="bg-gray-700">
-        <tr>
-            <th class="px-3 py-2 text-left">ID</th>
-            <th class="px-3 py-2 text-left">Tipo</th>
-            <th class="px-3 py-2 text-left">Severidad</th>
-            <th class="px-3 py-2 text-left">Mensaje</th>
-            <th class="px-3 py-2">Acciones</th>
-        </tr>
-    </thead>
+<section class="space-y-4">
+    <!-- Encabezado de sección -->
+    <div class="flex items-center justify-between gap-3">
+        <div>
+            <h1 class="text-xl font-semibold tracking-tight">Últimas alertas</h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Vista condensada de las <span class="font-medium text-slate-200">50 alertas más recientes</span> generadas por el agente local.
+            </p>
+        </div>
+        <div class="flex items-center gap-2 text-[11px] text-slate-400">
+            <span class="inline-flex items-center gap-1">
+                <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Monitor activo
+            </span>
+        </div>
+    </div>
 
-    <tbody>
-        {% for alert in alerts %}
-        <tr class="hover:bg-gray-700 transition">
-            <td class="px-3 py-2">{{ alert.id }}</td>
-            <td class="px-3 py-2">{{ alert.type }}</td>
-            <td class="px-3 py-2">{{ alert.severity }}</td>
-            <td class="px-3 py-2">{{ alert.message }}</td>
-            <td class="px-3 py-2 text-center">
-                <a href="/dashboard/alert/{{ alert.id }}"
-                   class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500">
-                    Ver
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+    <!-- Tarjeta con la tabla -->
+    <div class="bg-slate-900/70 border border-slate-800/70 rounded-2xl shadow-xl shadow-black/40 overflow-hidden">
+        <!-- Header de la tabla -->
+        <div class="px-4 py-3 flex items-center justify-between border-b border-slate-800/70 bg-slate-900/80">
+            <div class="text-xs text-slate-300 font-medium">
+                Alertas EDR · entorno local
+            </div>
+            <div class="text-[11px] text-slate-500">
+                Click en <span class="font-semibold text-emerald-400">Ver</span> para abrir el análisis detallado.
+            </div>
+        </div>
 
-</table>
+        <!-- Contenedor scrollable -->
+        <div class="overflow-x-auto max-h-[70vh]">
+            <table class="min-w-full text-xs">
+                <thead class="sticky top-0 bg-slate-900/95 backdrop-blur border-b border-slate-800/70">
+                    <tr class="text-slate-400">
+                        <th class="px-3 py-2 text-left font-medium">ID</th>
+                        <th class="px-3 py-2 text-left font-medium">Tipo</th>
+                        <th class="px-3 py-2 text-left font-medium">Severidad</th>
+                        <th class="px-3 py-2 text-left font-medium">Mensaje</th>
+                        <th class="px-3 py-2 text-center font-medium w-20">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/80">
+                    {% for alert in alerts %}
+                    {% set sev = (alert.severity or '').upper() %}
+                    <tr class="hover:bg-slate-800/70 transition-colors">
+                        <td class="px-3 py-2 align-top text-slate-300">
+                            {{ alert.id }}
+                        </td>
+
+                        <td class="px-3 py-2 align-top">
+                            <span class="inline-flex items-center rounded-full border border-slate-700/80 bg-slate-900/80 px-2 py-0.5 text-[10px] font-medium text-slate-200 uppercase tracking-wide">
+                                {{ alert.type or "N/A" }}
+                            </span>
+                        </td>
+
+                        <td class="px-3 py-2 align-top">
+                            {% if sev == "HIGH" %}
+                                {% set sev_color = "bg-red-500/15 text-red-300 border-red-500/40" %}
+                            {% elif sev == "MEDIUM" %}
+                                {% set sev_color = "bg-amber-500/10 text-amber-300 border-amber-500/40" %}
+                            {% elif sev == "LOW" %}
+                                {% set sev_color = "bg-emerald-500/10 text-emerald-300 border-emerald-500/40" %}
+                            {% else %}
+                                {% set sev_color = "bg-slate-700/40 text-slate-200 border-slate-500/40" %}
+                            {% endif %}
+
+                            <span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide {{ sev_color }}">
+                                {{ sev or "N/A" }}
+                            </span>
+                        </td>
+
+                        <td class="px-3 py-2 text-slate-300">
+                            <div class="line-clamp-2 text-[11px] leading-snug">
+                                {{ alert.message }}
+                            </div>
+                        </td>
+
+                        <td class="px-3 py-2 text-center align-top">
+                            <a href="/dashboard/alert/{{ alert.id }}"
+                               class="inline-flex items-center justify-center px-3 py-1.5 text-[11px] font-medium rounded-full bg-emerald-500/90 hover:bg-emerald-400 text-slate-950 transition-colors">
+                                Ver
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

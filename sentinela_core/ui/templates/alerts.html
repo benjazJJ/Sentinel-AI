@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">Últimas Alertas</h2>
+
+<table class="w-full bg-gray-800 rounded shadow divide-y divide-gray-700">
+    <thead class="bg-gray-700">
+        <tr>
+            <th class="px-3 py-2 text-left">ID</th>
+            <th class="px-3 py-2 text-left">Tipo</th>
+            <th class="px-3 py-2 text-left">Severidad</th>
+            <th class="px-3 py-2 text-left">Mensaje</th>
+            <th class="px-3 py-2">Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for alert in alerts %}
+        <tr class="hover:bg-gray-700 transition">
+            <td class="px-3 py-2">{{ alert.id }}</td>
+            <td class="px-3 py-2">{{ alert.type }}</td>
+            <td class="px-3 py-2">{{ alert.severity }}</td>
+            <td class="px-3 py-2">{{ alert.message }}</td>
+            <td class="px-3 py-2 text-center">
+                <a href="/dashboard/alert/{{ alert.id }}"
+                   class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500">
+                    Ver
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}
